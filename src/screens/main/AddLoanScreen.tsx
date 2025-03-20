@@ -17,7 +17,7 @@ import { HomeStackParamList } from '../../navigation/MainNavigator';
 import { useTheme } from '../../context/ThemeContext';
 import { useLoan } from '../../context/LoanContext';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import * as DateTimePicker from 'expo-datetime-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { format, addYears, addMonths } from 'date-fns';
 
 type AddLoanScreenNavigationProp = StackNavigationProp<HomeStackParamList, 'AddLoan'>;
@@ -421,26 +421,34 @@ const AddLoanScreen = () => {
             </TouchableOpacity>
           </View>
         </View>
-        
+
         {showStartDatePicker && (
-          <DateTimePicker.DateTimePickerModal
-            isVisible={showStartDatePicker}
-            mode="date"
-            date={startDate}
-            onConfirm={onStartDateChange}
-            onCancel={() => setShowStartDatePicker(false)}
-          />
+            <DateTimePicker
+                value={startDate}
+                mode="date"
+                display="default"
+                onChange={(event, selectedDate) => {
+                  setShowStartDatePicker(false);
+                  if (selectedDate) {
+                    onStartDateChange(selectedDate);
+                  }
+                }}
+            />
         )}
 
         {showEndDatePicker && (
-          <DateTimePicker.DateTimePickerModal
-            isVisible={showEndDatePicker}
-            mode="date"
-            date={endDate}
-            minimumDate={startDate}
-            onConfirm={onEndDateChange}
-            onCancel={() => setShowEndDatePicker(false)}
-          />
+            <DateTimePicker
+                value={endDate}
+                mode="date"
+                display="default"
+                minimumDate={startDate}
+                onChange={(event, selectedDate) => {
+                  setShowEndDatePicker(false);
+                  if (selectedDate) {
+                    onEndDateChange(selectedDate);
+                  }
+                }}
+            />
         )}
         
         <Text style={[styles.sectionTitle, { color: theme.text }]}>
