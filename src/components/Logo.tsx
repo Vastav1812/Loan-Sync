@@ -1,33 +1,30 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import LoanSyncLogo from '../assets/LoanSyncLogo';
+import LoanSyncLogoSimple from '../assets/LoanSyncLogoSimple';
 
 interface LogoProps {
   size?: 'small' | 'medium' | 'large';
-  color?: string;
+  style?: object;
 }
 
-const Logo: React.FC<LogoProps> = ({ 
-  size = 'medium',
-  color
-}) => {
-  const getDimensions = () => {
-    switch (size) {
+const Logo: React.FC<LogoProps> = ({ size = 'medium', style }) => {
+  const getSize = () => {
+    switch(size) {
       case 'small':
-        return { width: 60, height: 60 };
+        return 50;
       case 'large':
-        return { width: 200, height: 200 };
+        return 150;
       case 'medium':
       default:
-        return { width: 120, height: 120 };
+        return 100;
     }
   };
 
-  const { width, height } = getDimensions();
+  const logoSize = getSize();
 
   return (
-    <View style={styles.container}>
-      <LoanSyncLogo width={width} height={height} color={color} />
+    <View style={[styles.container, style]}>
+      <LoanSyncLogoSimple width={logoSize} height={logoSize} />
     </View>
   );
 };
