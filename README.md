@@ -1,8 +1,10 @@
 # LoanSync - A Unified Loan Management Platform
 
-LoanSync is a React Native mobile application that allows users to track and manage all their loans from different banks in one place. The app provides a centralized dashboard for monitoring loan details, EMI payments, and overall financial health.
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Vastav1812/Loan-Sync/main/src/assets/logo.png" alt="LoanSync Logo" width="200" height="200"/>
+</p>
 
-![LoanSync Logo](assets/icon.png)
+LoanSync is a React Native mobile application that allows users to track and manage all their loans from different banks in one place. The app provides a centralized dashboard for monitoring loan details, EMI payments, and overall financial health.
 
 ## Current State
 

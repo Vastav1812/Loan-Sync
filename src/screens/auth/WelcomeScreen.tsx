@@ -14,6 +14,7 @@ import { AuthStackParamList } from '../../navigation/AuthNavigator';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Logo from '../../components/Logo';
 
 type WelcomeScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'Welcome'>;
 
@@ -54,7 +55,7 @@ const WelcomeScreen = () => {
       
       <View style={styles.content}>
         <View style={styles.logoContainer}>
-          <Icon name="credit-card-check" size={64} color={theme.primary} />
+          <Logo size="large" />
           <Text style={[styles.appName, { color: theme.text }]}>LoanSync</Text>
         </View>
         
