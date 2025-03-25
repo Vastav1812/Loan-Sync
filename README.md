@@ -1,128 +1,147 @@
-# LoanSync
+# LoanSync - A Unified Loan Management Platform
 
-A sleek, modern app for managing all your loans in one place.
+LoanSync is a React Native mobile application that allows users to track and manage all their loans from different banks in one place. The app provides a centralized dashboard for monitoring loan details, EMI payments, and overall financial health.
 
-## Features
+![LoanSync Logo](assets/icon.png)
 
-- **Loan Aggregation Dashboard**: View all your loans in a unified dashboard
-- **Payment Hub**: Pay EMIs directly from the app
-- **Progress Tracking**: Visual progress bars showing loan payoff status
-- **Financial Insights**: AI-driven tips to save on interest
-- **Advanced UI**: Dark/light mode, interactive charts, and gesture-based navigation
-- **Security**: Biometric authentication and data encryption
+## Current State
 
-## Tech Stack
+The application is currently in active development with the following features implemented:
 
-- **Frontend**: React Native with TypeScript
-- **State Management**: React Context API
-- **UI Components**: Custom components with theming support
-- **Charts**: react-native-chart-kit
-- **Authentication**: Biometric authentication with react-native-biometrics
-- **Storage**: AsyncStorage for local data persistence
+- **User Authentication System**: 
+  - User registration and login functionality
+  - Secure password management
+  - Error handling for non-registered users attempting to login
+  - Biometric authentication support
 
-## Getting Started
+- **Database Integration**:
+  - Local AsyncStorage-based user database
+  - Multi-level authentication checks
 
-### Prerequisites
+The app is being developed with a focus on the Indian banking market, with plans to integrate with Account Aggregator framework and various Indian banking APIs.
 
-- Node.js (>= 16)
-- npm or yarn
-- React Native development environment set up
+## Upcoming Features
 
-### Installation
+- Account Aggregator (AA) framework integration for secure loan data access
+- Bank API integrations for major Indian banks
+- SMS parsing for loan updates
+- Real-time loan tracking across multiple financial institutions
+- UPI payment integration for EMI payments
+- Multi-language support for regional Indian languages
+
+## Prerequisites
+
+- Node.js (v16 or newer)
+- Yarn or npm
+- Expo CLI
+- iOS Simulator / Android Emulator or physical device for testing
+
+## Installation
 
 1. Clone the repository:
-   ```
-   git clone https://github.com/yourusername/loansync.git
-   cd loansync
+   ```bash
+   git clone https://github.com/Vastav1812/Loan-Sync.git
+   cd Loan-Sync
    ```
 
 2. Install dependencies:
-   ```
-   npm install
-   # or
+   ```bash
    yarn install
+   # or
+   npm install
    ```
 
-3. Start the Metro bundler:
-   ```
-   npm start
-   # or
-   yarn start
+3. Install Expo CLI (if not already installed):
+   ```bash
+   npm install -g expo-cli
    ```
 
-4. Run the app on Android:
-   ```
-   npm run android
-   # or
-   yarn android
-   ```
+## Running the Application
 
-5. Run the app on iOS:
-   ```
-   npm run ios
-   # or
-   yarn ios
-   ```
+### Using Expo
+
+```bash
+npx expo start
+```
+
+This will start the Metro bundler and display a QR code in your terminal. You can:
+- Scan the QR code with your device's camera (iOS) or the Expo Go app (Android)
+- Press 'i' to open in iOS simulator
+- Press 'a' to open in Android emulator
+
+### Running on iOS
+
+```bash
+# Using Expo
+npx expo start --ios
+
+# Using React Native CLI (if ejected)
+yarn ios
+# or
+npm run ios
+```
+
+### Running on Android
+
+```bash
+# Using Expo
+npx expo start --android
+
+# Using React Native CLI (if ejected)
+yarn android
+# or
+npm run android
+```
 
 ## Project Structure
 
 ```
 loansync/
-├── src/
-│   ├── assets/           # Images, fonts, and other static assets
-│   ├── components/       # Reusable UI components
-│   ├── context/          # React Context for state management
-│   ├── navigation/       # Navigation configuration
-│   ├── screens/          # App screens
-│   │   ├── auth/         # Authentication screens
-│   │   └── main/         # Main app screens
-│   └── utils/            # Utility functions
-├── App.tsx               # Main app component
-├── package.json          # Dependencies and scripts
-└── tsconfig.json         # TypeScript configuration
+├── src/                    # Source files
+│   ├── assets/             # Static assets
+│   ├── components/         # Reusable components
+│   ├── context/            # Context providers
+│   ├── navigation/         # Navigation configuration
+│   ├── screens/            # Screen components
+│   │   ├── auth/           # Authentication screens
+│   │   └── main/           # Main app screens
+│   └── services/           # API and service integrations
+├── assets/                 # External assets
+├── App.tsx                 # Main app component
+├── app.json                # Expo configuration
+├── babel.config.js         # Babel configuration
+├── package.json            # Dependencies and scripts
+└── tsconfig.json           # TypeScript configuration
 ```
 
-## Usage
+## Technologies Used
 
-### Authentication
+- React Native
+- Expo
+- TypeScript
+- React Navigation
+- AsyncStorage for local data storage
+- Expo Local Authentication for biometrics
 
-The app includes a demo authentication system. You can use any email and password to log in for demonstration purposes.
+## Security
 
-### Adding Loans
+The app implements several security best practices:
+- Secure storage for sensitive data
+- Authentication state management
+- User input validation
+- Error handling
 
-1. Navigate to the Dashboard
-2. Tap the "+" button in the top right corner
-3. Fill in the loan details
-4. Tap "Add Loan"
+Note: In a production environment, passwords would be properly hashed and all API communications would be encrypted.
 
-### Making Payments
+## Contributing
 
-1. Navigate to the Payments tab
-2. Select a loan from the list
-3. Enter the payment amount
-4. Choose a payment method
-5. Confirm the payment
-
-## Customization
-
-### Themes
-
-The app includes multiple themes:
-- Light
-- Dark
-- System Default (follows device settings)
-- Neon Night
-- Ocean Breeze
-
-To change the theme, go to Settings > Appearance > Theme.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Acknowledgements
+## Contact
 
-- [React Native](https://reactnative.dev/)
-- [React Navigation](https://reactnavigation.org/)
-- [react-native-chart-kit](https://github.com/indiespirit/react-native-chart-kit)
-- [react-native-biometrics](https://github.com/SelfLender/react-native-biometrics)
+Project Owner: Vastav Bishnoi
+GitHub: [Vastav1812](https://github.com/Vastav1812)

@@ -38,9 +38,29 @@ const LoginScreen = () => {
 
     setIsLoading(true);
     try {
-      const success = await login(email, password);
+      const { success, isRegistered } = await login(email, password);
+      
       if (!success) {
-        Alert.alert('Login Failed', 'Invalid email or password');
+        if (!isRegistered) {
+          // User is not registered at all
+          Alert.alert(
+            'Account Not Found',
+            'You need to create an account first. Would you like to sign up now?',
+            [
+              {
+                text: 'Cancel',
+                style: 'cancel',
+              },
+              {
+                text: 'Sign Up',
+                onPress: () => navigation.navigate('Register'),
+              },
+            ]
+          );
+        } else {
+          // User exists but password is wrong
+          Alert.alert('Login Failed', 'Invalid email or password');
+        }
       }
     } catch (error) {
       Alert.alert('Error', 'An error occurred during login');

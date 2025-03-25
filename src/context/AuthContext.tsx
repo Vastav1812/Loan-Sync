@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as LocalAuthentication from 'expo-local-authentication';
+import { UserDatabase, User as DatabaseUser } from '../services/UserDatabase';
 
 interface User {
   id: string;
@@ -12,9 +13,9 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<{ success: boolean; isRegistered: boolean }>;
   logout: () => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<boolean>;
+  register: (name: string, email: string, password: string) => Promise<{ success: boolean; userExists: boolean }>;
   biometricLogin: () => Promise<boolean>;
   isBiometricAvailable: boolean;
   enableBiometric: () => Promise<boolean>;
@@ -24,9 +25,9 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   isAuthenticated: false,
   isLoading: true,
-  login: async () => false,
+  login: async () => ({ success: false, isRegistered: false }),
   logout: async () => {},
-  register: async () => false,
+  register: async () => ({ success: false, userExists: false }),
   biometricLogin: async () => false,
   isBiometricAvailable: false,
   enableBiometric: async () => false,
@@ -52,7 +53,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const loadUser = async () => {
       try {
-        const userData = await AsyncStorage.getItem('user');
+        const userData = await AsyncStorage.getItem('currentUser');
         if (userData) {
           setUser(JSON.parse(userData));
         }
@@ -67,31 +68,43 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     loadUser();
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (email: string, password: string): Promise<{ success: boolean; isRegistered: boolean }> => {
     try {
-      // In a real app, you would make an API call to authenticate
-      // For demo purposes, we'll simulate a successful login
-      if (email && password) {
-        const mockUser = {
-          id: '1',
-          name: 'Demo User',
-          email,
+      // First, check if user exists
+      const userExists = await UserDatabase.findUserByEmail(email);
+      
+      // If user doesn't exist, return failure with isRegistered = false
+      if (!userExists) {
+        return { success: false, isRegistered: false };
+      }
+      
+      // Validate credentials
+      const validUser = await UserDatabase.verifyCredentials(email, password);
+      
+      if (validUser) {
+        // Create a safe user object (without password)
+        const safeUser: User = {
+          id: validUser.id,
+          name: validUser.name,
+          email: validUser.email,
         };
         
-        setUser(mockUser);
-        await AsyncStorage.setItem('user', JSON.stringify(mockUser));
-        return true;
+        setUser(safeUser);
+        await AsyncStorage.setItem('currentUser', JSON.stringify(safeUser));
+        return { success: true, isRegistered: true };
       }
-      return false;
+      
+      // Invalid password but user exists
+      return { success: false, isRegistered: true };
     } catch (error) {
       console.error('Login failed:', error);
-      return false;
+      return { success: false, isRegistered: false };
     }
   };
 
   const logout = async (): Promise<void> => {
     try {
-      await AsyncStorage.removeItem('user');
+      await AsyncStorage.removeItem('currentUser');
       await AsyncStorage.removeItem('biometricEnabled');
       setUser(null);
     } catch (error) {
@@ -99,25 +112,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const register = async (name: string, email: string, password: string): Promise<boolean> => {
+  const register = async (name: string, email: string, password: string): Promise<{ success: boolean; userExists: boolean }> => {
     try {
-      // In a real app, you would make an API call to register
-      // For demo purposes, we'll simulate a successful registration
-      if (name && email && password) {
-        const mockUser = {
-          id: '1',
-          name,
-          email,
+      // Check if user already exists
+      const existingUser = await UserDatabase.findUserByEmail(email);
+      
+      if (existingUser) {
+        return { success: false, userExists: true };
+      }
+      
+      // Create new user
+      const newUser = await UserDatabase.createUser(name, email, password);
+      
+      if (newUser) {
+        // Create a safe user object (without password)
+        const safeUser: User = {
+          id: newUser.id,
+          name: newUser.name,
+          email: newUser.email,
         };
         
-        setUser(mockUser);
-        await AsyncStorage.setItem('user', JSON.stringify(mockUser));
-        return true;
+        setUser(safeUser);
+        await AsyncStorage.setItem('currentUser', JSON.stringify(safeUser));
+        return { success: true, userExists: false };
       }
-      return false;
+      
+      return { success: false, userExists: false };
     } catch (error) {
       console.error('Registration failed:', error);
-      return false;
+      return { success: false, userExists: false };
     }
   };
 
@@ -133,7 +156,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
       
       if (result.success) {
-        const userData = await AsyncStorage.getItem('user');
+        const userData = await AsyncStorage.getItem('currentUser');
         if (userData) {
           setUser(JSON.parse(userData));
           return true;

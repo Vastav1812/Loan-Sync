@@ -46,9 +46,28 @@ const RegisterScreen = () => {
 
     setIsLoading(true);
     try {
-      const success = await register(name, email, password);
+      const { success, userExists } = await register(name, email, password);
+      
       if (!success) {
-        Alert.alert('Registration Failed', 'Could not create account. Please try again.');
+        if (userExists) {
+          // User already exists with this email
+          Alert.alert(
+            'Account Exists',
+            'An account with this email already exists. Would you like to sign in instead?',
+            [
+              {
+                text: 'Cancel',
+                style: 'cancel',
+              },
+              {
+                text: 'Sign In',
+                onPress: () => navigation.navigate('Login'),
+              },
+            ]
+          );
+        } else {
+          Alert.alert('Registration Failed', 'Could not create account. Please try again.');
+        }
       }
     } catch (error) {
       Alert.alert('Error', 'An error occurred during registration');

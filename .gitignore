@@ -64,3 +64,22 @@ yarn-error.log
 
 # testing
 /coverage
+
+# Expo
+.expo/
+web-build/
+dist/
+
+# Local Netlify folder
+.netlify
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Large files
+yarn.lock
+package-lock.json
